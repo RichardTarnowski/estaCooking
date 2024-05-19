@@ -4,7 +4,7 @@
   "description": "Deploy Symfony on Netlify with dynamic routing",
   "main": "index.js",
   "scripts": {
-    "build": "netlify-lambda build .netlify/functions"
+    "build": "netlify-lambda build functions"
   },
   "devDependencies": {
     "netlify-lambda": "^2.0.16"

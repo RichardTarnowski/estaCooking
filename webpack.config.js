@@ -2,10 +2,10 @@ const path = require('path');
 
 module.exports = {
     mode: 'production',
-    entry: './functions/app.php',
+    entry: './functions/app.js', // ajusta esto si es necesario
     output: {
         path: path.resolve(__dirname, 'dist/functions'),
-        filename: 'app.php',
+        filename: 'app.js', // ajusta esto si es necesario
     },
     module: {
         rules: [
@@ -16,6 +16,6 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.php'],
+        extensions: ['.js', '.php'], // asegúrate de que incluya .php si estás utilizando archivos PHP
     },
 };
