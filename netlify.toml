@@ -1,13 +1,12 @@
 [build]
   publish = "public"
-  command = "npm run build && composer install && php bin/console cache:clear --env=prod"
+  command = "composer install && php bin/console cache:clear --env=prod"
 
 [context.production.environment]
   PHP_VERSION = "8.1"
 
 [[redirects]]
   from = "/*"
-  to = "/api/app"
+  to = "/.netlify/functions/app"
   status = 200
   force = true
-
