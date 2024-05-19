@@ -5,6 +5,9 @@
 [context.production.environment]
   PHP_VERSION = "8.1"
 
+[functions]
+  directory = "dist/functions"
+
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/app"
