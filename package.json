@@ -1,0 +1,12 @@
+{
+  "name": "symfony-netlify",
+  "version": "1.0.0",
+  "description": "Deploy Symfony on Netlify with dynamic routing",
+  "main": "index.js",
+  "scripts": {
+    "build": "netlify-lambda build functions"
+  },
+  "devDependencies": {
+    "netlify-lambda": "^2.0.16"
+  }
+}
