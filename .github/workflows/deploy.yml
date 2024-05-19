@@ -21,15 +21,20 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Build the site
+      - name: Clear Symfony cache
         run: php bin/console cache:clear --env=prod
 
-      # - name: Build the static site
-      #   run: php bin/console your:build:command # Reemplaza este comando por el que uses para construir tu sitio estático
+      - name: Start Symfony server and generate static site
+        run: |
+          symfony server:start -d
+          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://localhost:8000
+          mv localhost:8000 public/
+          symfony server:stop
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public  # Cambia './public' por tu directorio de build si es diferente
+          publish_dir: ./public
+
 
