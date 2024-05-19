@@ -1,0 +1,11 @@
+[build]
+  publish = "public"
+  command = "composer install && php bin/console cache:clear --env=prod"
+
+[context.production.environment]
+    PHP_VERSION = "8.1"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

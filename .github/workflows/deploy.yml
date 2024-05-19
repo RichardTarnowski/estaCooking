@@ -1,59 +1,59 @@
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches:
-      - main  # Cambia 'main' por la rama que estás usando
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Actualizado a v3 que usa Node.js 20
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'  # Cambiado a PHP 8.1
-
-      - name: Install Symfony CLI
-        run: curl -sS https://get.symfony.com/cli/installer | bash
-
-      - name: Add Symfony CLI to PATH
-        run: |
-          mv ~/.symfony*/ ~/.symfony
-          echo "$HOME/.symfony/bin" >> $GITHUB_PATH
-          echo "Symfony CLI installed at: $(which symfony)"
-
-      - name: Verify Symfony CLI Installation
-        run: ~/.symfony/bin/symfony --version
-
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Clear Symfony cache
-        run: php bin/console cache:clear --env=prod
-
-      - name: Start Symfony server and generate static site
-        run: |
-          echo "Starting Symfony server..."
-          ~/.symfony/bin/symfony server:start -d
-          sleep 5  # Esperar a que el servidor esté completamente iniciado
-          echo "Generating static site with wget..."
-          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
-          echo "Moving generated files to public directory..."
-          mkdir -p public
-          mv 127.0.0.1:8000/* public/
-          echo "Stopping Symfony server..."
-          ~/.symfony/bin/symfony server:stop
-
-      - name: List files in public directory
-        run: ls -l public
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+#name: Deploy to GitHub Pages
+#
+#on:
+#  push:
+#    branches:
+#      - main  # Cambia 'main' por la rama que estás usando
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v3  # Actualizado a v3 que usa Node.js 20
+#
+#      - name: Set up PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: '8.1'  # Cambiado a PHP 8.1
+#
+#      - name: Install Symfony CLI
+#        run: curl -sS https://get.symfony.com/cli/installer | bash
+#
+#      - name: Add Symfony CLI to PATH
+#        run: |
+#          mv ~/.symfony*/ ~/.symfony
+#          echo "$HOME/.symfony/bin" >> $GITHUB_PATH
+#          echo "Symfony CLI installed at: $(which symfony)"
+#
+#      - name: Verify Symfony CLI Installation
+#        run: ~/.symfony/bin/symfony --version
+#
+#      - name: Install dependencies
+#        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+#
+#      - name: Clear Symfony cache
+#        run: php bin/console cache:clear --env=prod
+#
+#      - name: Start Symfony server and generate static site
+#        run: |
+#          echo "Starting Symfony server..."
+#          ~/.symfony/bin/symfony server:start -d
+#          sleep 5  # Esperar a que el servidor esté completamente iniciado
+#          echo "Generating static site with wget..."
+#          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
+#          echo "Moving generated files to public directory..."
+#          mkdir -p public
+#          mv 127.0.0.1:8000/* public/
+#          echo "Stopping Symfony server..."
+#          ~/.symfony/bin/symfony server:stop
+#
+#      - name: List files in public directory
+#        run: ls -l public
+#
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./public
