@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Actualizado a v3 que usa Node.js 20
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'  # Puedes cambiar a la versión de PHP que necesites
+          php-version: '8.1'  # Cambiado a PHP 8.1
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -27,14 +27,16 @@ jobs:
       - name: Start Symfony server and generate static site
         run: |
           symfony server:start -d
-          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://localhost:8000
-          mv localhost:8000 public/
+          sleep 5  # Esperar a que el servidor esté completamente iniciado
+          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
+          mv 127.0.0.1:8000/* public/
           symfony server:stop
+
+      - name: List files in public directory
+        run: ls -l public
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-
-
