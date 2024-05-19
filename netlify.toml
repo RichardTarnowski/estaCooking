@@ -1,12 +1,13 @@
 [build]
   publish = "public"
-  command = "composer install && php bin/console cache:clear --env=prod"
+  command = "npm run build && composer install && php bin/console cache:clear --env=prod"
 
 [context.production.environment]
   PHP_VERSION = "8.1"
 
 [[redirects]]
   from = "/*"
-  to = "/.functions/app"
+  to = "/api/app"
   status = 200
   force = true
+
