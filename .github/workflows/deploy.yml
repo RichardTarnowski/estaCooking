@@ -22,10 +22,13 @@ jobs:
         run: curl -sS https://get.symfony.com/cli/installer | bash
 
       - name: Add Symfony CLI to PATH
-        run: echo "$HOME/.symfony/bin" >> $GITHUB_PATH
+        run: |
+          mv ~/.symfony*/ ~/.symfony
+          echo "$HOME/.symfony/bin" >> $GITHUB_PATH
+          echo "Symfony CLI installed at: $(which symfony)"
 
       - name: Verify Symfony CLI Installation
-        run: $HOME/.symfony/bin/symfony --version
+        run: ~/.symfony/bin/symfony --version
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -36,7 +39,7 @@ jobs:
       - name: Start Symfony server and generate static site
         run: |
           echo "Starting Symfony server..."
-          $HOME/.symfony/bin/symfony server:start -d
+          ~/.symfony/bin/symfony server:start -d
           sleep 5  # Esperar a que el servidor esté completamente iniciado
           echo "Generating static site with wget..."
           wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
@@ -44,7 +47,7 @@ jobs:
           mkdir -p public
           mv 127.0.0.1:8000/* public/
           echo "Stopping Symfony server..."
-          $HOME/.symfony/bin/symfony server:stop
+          ~/.symfony/bin/symfony server:stop
 
       - name: List files in public directory
         run: ls -l public
