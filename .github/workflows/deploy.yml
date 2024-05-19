@@ -16,16 +16,16 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Cambiado para PHP 8.1
+          php-version: '8.1'  # Cambiado a PHP 8.1
 
       - name: Install Symfony CLI
         run: curl -sS https://get.symfony.com/cli/installer | bash
 
       - name: Add Symfony CLI to PATH
-        run: echo "$HOME/.symfony5/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.symfony/bin" >> $GITHUB_PATH
 
       - name: Verify Symfony CLI Installation
-        run: $HOME/.symfony5/bin/symfony --version
+        run: $HOME/.symfony/bin/symfony --version
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -35,11 +35,11 @@ jobs:
 
       - name: Start Symfony server and generate static site
         run: |
-          $HOME/.symfony5/bin/symfony server:start -d
+          $HOME/.symfony/bin/symfony server:start -d
           sleep 5  # Esperar a que el servidor esté completamente iniciado
           wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
           mv 127.0.0.1:8000/* public/
-          $HOME/.symfony5/bin/symfony server:stop
+          $HOME/.symfony/bin/symfony server:stop
 
       - name: List files in public directory
         run: ls -l public
