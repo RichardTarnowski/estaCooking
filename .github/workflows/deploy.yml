@@ -35,10 +35,15 @@ jobs:
 
       - name: Start Symfony server and generate static site
         run: |
+          echo "Starting Symfony server..."
           $HOME/.symfony/bin/symfony server:start -d
           sleep 5  # Esperar a que el servidor esté completamente iniciado
+          echo "Generating static site with wget..."
           wget --mirror --convert-links --adjust-extension --page-requisites --no-parent http://127.0.0.1:8000
+          echo "Moving generated files to public directory..."
+          mkdir -p public
           mv 127.0.0.1:8000/* public/
+          echo "Stopping Symfony server..."
           $HOME/.symfony/bin/symfony server:stop
 
       - name: List files in public directory
